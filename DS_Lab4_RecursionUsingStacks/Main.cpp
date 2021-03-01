@@ -1,3 +1,12 @@
+/*	Hankel Haldin
+*	ICCC Data Structures
+*	LAB 4: Using Recursion to reverse the elements of a stack.
+*	Description: This program has two functions. PushItems() recursively pushes items to a stack -
+*	and ReverseStack() pops items from the stack and stores them in a queue that acts as a buffer.
+*	Popping and enqueuing the elements occurs during the ascending phase of ReverseStack(). On the descending -
+*	phase elements are deqeueued and pushed back to the original stack in the reverse order.
+*/
+
 #include <iostream>
 #include "Stack.h"
 #include "Queue.h"
@@ -5,7 +14,12 @@
 using namespace std;
 
 void PushItems(Stack* PrimaryStack, int nData);
+//Pre: A stack object has been dynamically allocated and PrimaryStack is a valid pointer to it.
+//Post: A consecutive sequence of integers has been pushed to the stack.
+
 void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue);
+//Pre: Both a stack and queue objects have been dynamically allocated and PrimaryStack and AuxiliaryQueue are pointers to them.
+//Post: The stack object that PrimaryStack points to has been reversed.
 
 int main()
 {
@@ -25,9 +39,9 @@ int main()
 
 void PushItems(Stack* PrimaryStack, int nData)
 {
-	if (nData == 5) {
-		cout << "End of ascending phase.\n";
-		cout << "Entering returning phase.";
+	if (nData == 10) {
+		cout << "--- End of ascending phase. ---\n";
+		cout << "--- Entering returning phase. ---";
 	} else {
 		ItemType iNewItem;
 		iNewItem.Set(nData);
@@ -56,7 +70,8 @@ void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue)
 		cout << "Data being dequeued and pushed to original stack: " << iTempItem.Get() << endl;
 		PrimaryStack->Push(iTempItem);
 	} catch (EmptyStack exception) {
-		cout << "End of ascending phase reached.\n";
-		cout << "Entering returning phase.\n";
+		cout << "--- End of ascending phase reached. ---\n";
+		cout << "--- Entering returning phase. ---\n";
+		cout << "Reversed stack: \n";
 	}
 }
