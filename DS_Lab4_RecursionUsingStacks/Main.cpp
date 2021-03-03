@@ -13,11 +13,11 @@
 
 using namespace std;
 
-void PushItems(Stack* PrimaryStack, int nData);
+void PushItems(Stack* PrimaryStack, int nData, ItemType iTempItem);
 //Pre: A stack object has been dynamically allocated and PrimaryStack is a valid pointer to it.
 //Post: A consecutive sequence of integers has been pushed to the stack.
 
-void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue);
+void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue, ItemType iTempItem);
 //Pre: Both a stack and queue objects have been dynamically allocated and PrimaryStack and AuxiliaryQueue are pointers to them.
 //Post: The stack object that PrimaryStack points to has been reversed.
 
@@ -26,37 +26,42 @@ int main()
 	Stack* PrimaryStack = new Stack;
 	Queue* AuxiliaryQueue = new Queue;
 	int nData = 0;
+	ItemType iTempItem;
 
 	cout << "Recursive call to PushItems(): \n";
-	PushItems(PrimaryStack, nData);
+	cout << "Original stack: \n";
+	PushItems(PrimaryStack, nData, iTempItem);
 	cout << "\n### End of PushItems() ###\n";
 	cout << "\nRecursive calls to ReverseStack(): \n";
-	ReverseStack(PrimaryStack, AuxiliaryQueue);
+	ReverseStack(PrimaryStack, AuxiliaryQueue, iTempItem);
 	cout << "### End of ReverseStack() ###\n";
 
 	return 0;
 }
 
-void PushItems(Stack* PrimaryStack, int nData)
+void PushItems(Stack* PrimaryStack, int nData, ItemType iTempItem)
 {
 	if (nData == 10) {
 		cout << "--- End of ascending phase. ---\n";
 		cout << "--- Entering returning phase. ---";
 	} else {
-		ItemType iNewItem;
-		iNewItem.Set(nData);
+		/*This code will execute during the ascending phase:*/
+		iTempItem.Set(nData);
 		cout << "Current item being pushed to the stack: " << nData << endl;
-		PrimaryStack->Push(iNewItem);
+		PrimaryStack->Push(iTempItem);
 
-		PushItems(PrimaryStack, nData + 1);
+		/*Recursive Call*/
+		PushItems(PrimaryStack, nData + 1, iTempItem);
+
+		/*Returning phase of calls (nothing happens in this function)*/
 	}
 }
 
-void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue)
+void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue, ItemType iTempItem)
 {
-	ItemType iTempItem;
 	try
 	{
+		/*This code is executed during the ascending phase of recursive calls:*/
 		int nTemp = PrimaryStack->Top().Get();
 		cout << "Data popped from the top of the stack and enqueued: " << nTemp << endl;
 		PrimaryStack->Pop();
@@ -64,11 +69,13 @@ void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue)
 		AuxiliaryQueue->Enqueue(iTempItem);
 		
 		/*Recursive call*/
-		ReverseStack(PrimaryStack, AuxiliaryQueue);
+		ReverseStack(PrimaryStack, AuxiliaryQueue, iTempItem);
 
+		/*These three statements will be executed during the returning phase:*/
 		AuxiliaryQueue->Dequeue(iTempItem);
 		cout << "Data being dequeued and pushed to original stack: " << iTempItem.Get() << endl;
 		PrimaryStack->Push(iTempItem);
+
 	} catch (EmptyStack exception) {
 		cout << "--- End of ascending phase reached. ---\n";
 		cout << "--- Entering returning phase. ---\n";
