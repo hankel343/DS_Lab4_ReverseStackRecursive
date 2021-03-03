@@ -4,14 +4,19 @@
 *	Description: This program has two functions. PushItems() recursively pushes items to a stack -
 *	and ReverseStack() pops items from the stack and stores them in a queue that acts as a buffer.
 *	Popping and enqueuing the elements occurs during the ascending phase of ReverseStack(). On the descending -
-*	phase elements are deqeueued and pushed back to the original stack in the reverse order.
-*/
+*	phase elements are deqeueued and pushed back to the original stack in the reverse order.*/
 
 #include <iostream>
 #include "Stack.h"
 #include "Queue.h"
 
 using namespace std;
+
+/*	DESIGN NOTE ON PUSHITEMS():
+*	I could have reversed the stack faster by popping items to the queue during the returning phase of PushItems(), 
+*	but I felt that if I was going to stick with the design principle of each function doing one thing it wouldn't make sense for me to -
+*	also pop items from the stack if the function's name is PushItems(). This is why I left the returning phase of PushItems() empty and -
+*	performed that operation in ReverseStack(). It fits better there in the logical design of my program.*/
 
 void PushItems(Stack* PrimaryStack, int nData, ItemType iTempItem);
 //Pre: A stack object has been dynamically allocated and PrimaryStack is a valid pointer to it.
@@ -52,6 +57,7 @@ void PushItems(Stack* PrimaryStack, int nData, ItemType iTempItem)
 
 		/*Recursive Call*/
 		PushItems(PrimaryStack, nData + 1, iTempItem);
+		/*End of ascending phase code once base case is reached*/
 
 		/*Returning phase of calls (nothing happens in this function)*/
 	}
@@ -70,6 +76,7 @@ void ReverseStack(Stack* PrimaryStack, Queue* AuxiliaryQueue, ItemType iTempItem
 		
 		/*Recursive call*/
 		ReverseStack(PrimaryStack, AuxiliaryQueue, iTempItem);
+		/*End of ascending phase code once base case is reached*/
 
 		/*These three statements will be executed during the returning phase:*/
 		AuxiliaryQueue->Dequeue(iTempItem);
